@@ -1,0 +1,47 @@
+{
+	"name": "devil-web",
+	"description": "A Progressive Web App (PWA) client for the devil API, built with SvelteKit, TypeScript, and Tailwind CSS.",
+	"version": "0.1.0",
+	"author": "Mateusz Hajder",
+	"license": "AGPL-3.0-only",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/devil-imps/devil-web.git"
+	},
+	"homepage": "https://devil-imps.github.io/devil-web",
+	"scripts": {
+		"build": "vite build",
+		"dev": "vite dev",
+		"preview": "vite preview",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "eslint .",
+		"format": "prettier --write ."
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.35.0",
+		"@sveltejs/adapter-static": "^3.0.9",
+		"@sveltejs/kit": "^2.41.0",
+		"@sveltejs/vite-plugin-svelte": "^6.2.0",
+		"@tailwindcss/postcss": "^4.1.13",
+		"@tailwindcss/typography": "^0.5.16",
+		"@types/eslint": "^9.6.1",
+		"@typescript-eslint/eslint-plugin": "^8.44.0",
+		"@typescript-eslint/parser": "^8.44.0",
+		"eslint": "^9.35.0",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-svelte": "^3.12.3",
+		"globals": "^16.4.0",
+		"postcss": "^8.5.6",
+		"prettier": "^3.6.2",
+		"prettier-plugin-svelte": "^3.4.0",
+		"svelte": "^5.38.10",
+		"svelte-check": "^4.3.1",
+		"tailwindcss": "^4.1.13",
+		"tslib": "^2.8.1",
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.44.0",
+		"vite": "^7.1.5"
+	},
+	"type": "module"
+}

@@ -1,0 +1,246 @@
+<script lang="ts">
+	import { createEventDispatcher } from 'svelte';
+	import { generateAndCopyPassword } from '$lib/utils';
+	import { addToast } from '$lib/stores/appState';
+
+	export let showModal: boolean = false;
+	export let loading: boolean = false;
+
+	let emailAddress: string = '';
+	let emailPassword: string = '';
+	let showPassword: boolean = false;
+	let isFirstOpen: boolean = true;
+
+	const dispatch = createEventDispatcher();
+
+	// Reset form only when modal is first opened, not when reopening after error
+	$: if (showModal && !loading && isFirstOpen) {
+		resetForm();
+		isFirstOpen = false;
+	}
+
+	// Reset first open flag when modal is closed
+	$: if (!showModal) {
+		isFirstOpen = true;
+	}
+
+	function closeModal() {
+		if (!loading) {
+			resetForm();
+			dispatch('cancel');
+		}
+	}
+
+	function resetForm() {
+		emailAddress = '';
+		emailPassword = '';
+		showPassword = false;
+	}
+
+	function togglePasswordVisibility(): void {
+		showPassword = !showPassword;
+	}
+
+	function passwordInput(node: HTMLInputElement, show: boolean) {
+		node.type = show ? 'text' : 'password';
+		return {
+			update(show: boolean) {
+				node.type = show ? 'text' : 'password';
+			}
+		};
+	}
+
+	async function generateRandomPassword(): Promise<void> {
+		try {
+			const generatedPassword = await generateAndCopyPassword(16);
+			emailPassword = generatedPassword;
+
+			addToast({
+				type: 'success',
+				message: 'Random password generated and copied to clipboard!'
+			});
+		} catch (error) {
+			console.error('Failed to generate password:', error);
+			addToast({
+				type: 'error',
+				message: 'Failed to generate password'
+			});
+		}
+	}
+
+	function handleSubmit() {
+		if (emailAddress.trim() && emailPassword.trim()) {
+			dispatch('submit', {
+				email_mailbox: emailAddress.trim(),
+				password: emailPassword.trim()
+			});
+		}
+	}
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === 'Enter' && !loading && emailAddress.trim() && emailPassword.trim()) {
+			handleSubmit();
+		}
+	}
+</script>
+
+<svelte:window on:keydown={handleKeydown} />
+
+{#if showModal}
+	<div class="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+		<div class="bg-white dark:bg-dark-800 rounded-lg max-w-md w-full">
+			<div class="p-6">
+				<div class="flex justify-between items-center mb-4">
+					<h2 class="text-xl font-bold text-gray-900 dark:text-white">Add Email Account</h2>
+					{#if !loading}
+						<button
+							on:click={closeModal}
+							class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+							aria-label="Close modal"
+						>
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M6 18L18 6M6 6l12 12"
+								></path>
+							</svg>
+						</button>
+					{/if}
+				</div>
+
+				<form on:submit|preventDefault={handleSubmit} class="space-y-4">
+					<div>
+						<label
+							for="emailAddress"
+							class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+						>
+							Email Address
+						</label>
+						<input
+							type="email"
+							id="emailAddress"
+							bind:value={emailAddress}
+							placeholder="user@domain.com"
+							class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+							disabled={loading}
+							required
+							on:keydown={handleKeydown}
+						/>
+						<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+							Enter the full email address (e.g., user@domain.com)
+						</p>
+					</div>
+
+					<div>
+						<label
+							for="emailPassword"
+							class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+						>
+							Password
+						</label>
+						<div class="flex gap-2">
+							<div class="relative flex-1">
+								<input
+									bind:value={emailPassword}
+									placeholder="Enter email account password"
+									class="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+									disabled={loading}
+									required
+									on:keydown={handleKeydown}
+									use:passwordInput={showPassword}
+								/>
+								<button
+									type="button"
+									on:click={togglePasswordVisibility}
+									class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+									disabled={loading}
+								>
+									{#if showPassword}
+										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+											></path>
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+											></path>
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M9.878 9.878L15.828 15.828"
+											></path>
+										</svg>
+									{:else}
+										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+											></path>
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+											></path>
+										</svg>
+									{/if}
+								</button>
+							</div>
+							<button
+								type="button"
+								on:click={generateRandomPassword}
+								disabled={loading}
+								class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200 text-sm font-medium whitespace-nowrap"
+							>
+								Generate
+							</button>
+						</div>
+						<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+							Enter a secure password for the email account
+						</p>
+					</div>
+				</form>
+
+				<div class="flex justify-end space-x-3 mt-6">
+					<button on:click={closeModal} disabled={loading} class="btn-secondary"> Cancel </button>
+					<button
+						on:click={handleSubmit}
+						disabled={loading || !emailAddress.trim() || !emailPassword.trim()}
+						class="btn-primary {loading || !emailAddress.trim() || !emailPassword.trim()
+							? 'opacity-50 cursor-not-allowed'
+							: ''}"
+					>
+						{#if loading}
+							<svg class="animate-spin h-4 w-4 mr-2 inline" fill="none" viewBox="0 0 24 24">
+								<circle
+									class="opacity-25"
+									cx="12"
+									cy="12"
+									r="10"
+									stroke="currentColor"
+									stroke-width="4"
+								></circle>
+								<path
+									class="opacity-75"
+									fill="currentColor"
+									d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+								></path>
+							</svg>
+						{/if}
+						Add Email Account
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+{/if}

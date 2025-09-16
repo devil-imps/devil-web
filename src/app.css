@@ -1,0 +1,128 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+	--color-devil-50: #fef2f2;
+	--color-devil-100: #fee2e2;
+	--color-devil-200: #fecaca;
+	--color-devil-300: #fca5a5;
+	--color-devil-400: #f87171;
+	--color-devil-500: #dc2626;
+	--color-devil-600: #b91c1c;
+	--color-devil-700: #991b1b;
+	--color-devil-800: #7f1d1d;
+	--color-devil-900: #6b1d1d;
+	--color-devil-950: #450a0a;
+
+	--color-dark-50: #f8fafc;
+	--color-dark-100: #f1f5f9;
+	--color-dark-200: #e2e8f0;
+	--color-dark-300: #cbd5e1;
+	--color-dark-400: #94a3b8;
+	--color-dark-500: #64748b;
+	--color-dark-600: #475569;
+	--color-dark-700: #334155;
+	--color-dark-800: #1e293b;
+	--color-dark-900: #0f172a;
+	--color-dark-950: #020617;
+
+	--color-accent-blue: #3b82f6;
+	--color-accent-green: #10b981;
+	--color-accent-yellow: #f59e0b;
+	--color-accent-red: #ef4444;
+	--color-accent-purple: #8b5cf6;
+
+	--font-sans: Inter, system-ui, sans-serif;
+}
+
+@utility btn-primary {
+	/* Primary buttons */
+	@apply bg-devil-500 hover:bg-devil-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 focus:outline-hidden focus:ring-2 focus:ring-devil-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-dark-900 shadow-xs hover:shadow-md;
+}
+
+@utility btn-secondary {
+	@apply bg-gray-200 hover:bg-gray-300 dark:bg-dark-700 dark:hover:bg-dark-600 text-gray-900 dark:text-gray-100 font-medium py-2 px-4 rounded-lg transition-all duration-200 focus:outline-hidden focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-dark-900 shadow-xs hover:shadow-md;
+}
+
+@utility btn-danger {
+	@apply bg-accent-red hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 focus:outline-hidden focus:ring-2 focus:ring-accent-red focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-dark-900 shadow-xs hover:shadow-md;
+}
+
+@utility btn-success {
+	@apply bg-accent-green hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 focus:outline-hidden focus:ring-2 focus:ring-accent-green focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-dark-900 shadow-xs hover:shadow-md;
+}
+
+@utility input-field {
+	/* Input fields */
+	@apply bg-white dark:bg-dark-800 border border-gray-300 dark:border-dark-600 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 focus:outline-hidden focus:ring-2 focus:ring-devil-500 focus:border-transparent transition-all duration-200 placeholder-gray-500 dark:placeholder-gray-400;
+}
+
+@utility card {
+	/* Cards */
+	@apply bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-lg p-6 shadow-xs hover:shadow-md transition-all duration-200;
+}
+
+@utility card-header {
+	@apply bg-gray-50 dark:bg-dark-700 border-b border-gray-200 dark:border-dark-600 px-6 py-4 rounded-t-lg;
+}
+
+@utility nav-item {
+	/* Navigation */
+	@apply flex items-center px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-700 hover:text-devil-600 dark:hover:text-devil-400 transition-all duration-200 font-medium;
+
+	&.active {
+		@apply bg-devil-50 dark:bg-devil-900/20 text-devil-600 dark:text-devil-400 border-r-2 border-devil-500;
+	}
+}
+
+@utility active {
+	&.nav-item {
+		@apply bg-devil-50 dark:bg-devil-900/20 text-devil-600 dark:text-devil-400 border-r-2 border-devil-500;
+	}
+}
+
+@utility badge {
+	/* Status badges */
+	@apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+@utility badge-success {
+	@apply bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400;
+}
+
+@utility badge-warning {
+	@apply bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-400;
+}
+
+@utility badge-error {
+	@apply bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400;
+}
+
+@utility badge-info {
+	@apply bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-400;
+}
+
+@layer base {
+	html {
+		font-family:
+			system-ui,
+			-apple-system,
+			BlinkMacSystemFont,
+			'Segoe UI',
+			Roboto,
+			'Helvetica Neue',
+			'Noto Sans',
+			'Liberation Sans',
+			Arial,
+			sans-serif,
+			'Apple Color Emoji',
+			'Segoe UI Emoji',
+			'Segoe UI Symbol',
+			'Noto Color Emoji';
+	}
+
+	body {
+		@apply bg-white dark:bg-dark-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200;
+	}
+}
