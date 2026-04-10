@@ -2,6 +2,10 @@
 
 A Progressive Web App (PWA) client for managing [devil API](https://github.com/devil-imps/devil-api) services, built with SvelteKit, TypeScript, and Tailwind CSS v4.
 
+## Screenshot
+
+![I hope that in the future the official DevilWEB panel will look like this](./.github/screenshot.png)
+
 ## Getting Started
 
 ### Prerequisites
